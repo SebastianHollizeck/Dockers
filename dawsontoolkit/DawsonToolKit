@@ -1,0 +1,17 @@
+FROM r-base
+
+RUN apt-get update && apt-get install -y --no-install-recommends libcurl4-openssl-dev libxml2-dev
+
+RUN R --slave -e 'install.packages("BiocManager")' &&  R --slave -e 'BiocManager::install(c("optparse","data.table", "Rsamtools", "GenomicRanges"), update=TRUE, ask=FALSE)'
+
+RUN mkdir -p /usr/local/src/myscripts
+COPY filterStrelkaCalls.R /usr/local/src/myscripts
+COPY callSomaticFreeBayes.R /usr/local/src/myscripts
+
+WORKDIR /usr/local/src/myscripts
+
+
+ENV PATH="/usr/local/src/myscripts:${PATH}"
+
+ENTRYPOINT ["Rscript"]
+CMD ["filterStrelkaCalls.R", "-h"]
