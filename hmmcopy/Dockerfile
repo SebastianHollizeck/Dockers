@@ -1,10 +1,9 @@
-FROM centos
+FROM centos:8
 
 MAINTAINER Sebastian Hollizeck
 
 #install system update and install packages
 RUN yum update -y && yum install -y git cmake gcc-c++ make zlib-devel
-
 
 WORKDIR /opt
 
@@ -14,4 +13,4 @@ RUN git clone https://github.com/shahcompbio/hmmcopy_utils.git hmmcopy && cd /op
 #add the bin folder to the path
 ENV PATH=/opt/hmmcopy/bin/:$PATH
 
-CMD ["gcCounter"]
+CMD ["readCounter"]
